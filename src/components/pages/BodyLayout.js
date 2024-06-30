@@ -1,9 +1,11 @@
 // src/Layout.js
-import React from "react";
+import React, { useContext } from "react";
 import StoryCard from "./StoryCard";
 import { Link } from "react-router-dom";
+import ThemeContext from "../utils/ThemeContext";
 
 const BodyLayout = () => {
+  const { isDark } = useContext(ThemeContext);
   return (
     <>
       <div className="flex flex-col md:flex-row h-[75vh]">
@@ -34,8 +36,18 @@ const BodyLayout = () => {
           </ul>
         </div>
         {/* Middle Content Section */}
-        <div className="w-full md:w-full bg-white p-4 md:3/4">
-          <h2 className="text-lg font-semibold mb-4">সাপ্তাহিক গল্প</h2>
+        <div
+          className={`w-full md:w-full ${
+            isDark ? "bg-slate-800" : "bg-white"
+          } p-4 md:3/4`}
+        >
+          <h2
+            className={`${
+              isDark ? " text-gray-100" : ""
+            } text-lg font-semibold mb-4`}
+          >
+            সাপ্তাহিক গল্প
+          </h2>
           <Link to="/story/001">
             <StoryCard />
           </Link>

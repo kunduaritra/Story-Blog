@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import ThemeContext from "../utils/ThemeContext";
 
 const Story = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const { isDark } = useContext(ThemeContext);
 
   const handleAddComment = () => {
     if (newComment.trim() !== "") {
@@ -12,8 +14,16 @@ const Story = () => {
   };
 
   return (
-    <div className="p-6 bg-orange-100 drop-shadow-md rounded-md mb-2">
-      <div className="font-bold text-3xl mb-2 text-center">
+    <div
+      className={`p-6 ${
+        isDark ? "bg-slate-800" : "bg-orange-100"
+      } drop-shadow-md rounded-md mb-2`}
+    >
+      <div
+        className={`font-bold text-3xl mb-2 text-center ${
+          isDark ? "text-white" : ""
+        }`}
+      >
         আমার জন্মদিন এবং আমার মা
       </div>
       <div className="flex justify-between mb-2 mx-52 text-lg">
@@ -25,7 +35,11 @@ const Story = () => {
 
       {/* Story Content */}
       <div className="flex items-center">
-        <div className="text-justify sm:px-14 mt-5 sm:leading-10 leading-8 text-xl w-full border border-black rounded-3xl">
+        <div
+          className={`${
+            isDark ? "text-gray-200 border-gray-200" : "border-black"
+          } text-justify sm:px-14 mt-5 sm:leading-10 leading-8 text-xl w-full border rounded-3xl`}
+        >
           কাল ছিল আমার জন্মদিন। একথা জানত আমার স্ত্রী, দুই মেয়ে আর বড়ো মেয়ের বর।
           এজন্য ২৭ তারিখ রাত বারোটার পরই ভিডিও কল করে ওরা জন্মদিনের শুভেচ্ছা
           জানিয়েছে। আর জেনেছে আমার ফেসবুকে বন্ধুবৃত্তে থাকা মানুষজন। কাল সারাদিন

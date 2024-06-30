@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineLightMode, MdDarkMode } from "react-icons/md";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
+import ThemeContext from "../utils/ThemeContext";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const themeCntx = useContext(ThemeContext);
+
+  const { isDark, setIsDark } = themeCntx;
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+  };
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
-    <nav className="bg-gray-100 p-4 border border-b-gray-500">
+    <nav
+      className={`${
+        isDark ? "bg-slate-900 text-white" : "bg-gray-100"
+      } p-4 border border-b-gray-500 border-t-black border-x-black`}
+    >
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <div>
@@ -23,7 +35,7 @@ const NavBar = () => {
               alt="441022670-805270111580199-4093614610536777440-n-modified"
               border="0"
             />
-            <span className="text-red-950 text-5xl font-bold ml-2 block">
+            <span className="text-red-95 text-5xl font-bold ml-2 block">
               কথাচর্চা
             </span>
           </div>
@@ -35,9 +47,15 @@ const NavBar = () => {
         <div className="flex items-center justify-center">
           {/* Theme Toggle Button */}
           <div>
-            <button className="text-2xl mx-2 hover:bg-gray-300 hover:rounded-full p-2">
-              <MdDarkMode />
-              {/* <MdOutlineLightMode /> */}
+            <button
+              onClick={toggleTheme}
+              className="text-2xl mx-2 hover:bg-gray-300 hover:rounded-full p-2"
+            >
+              {isDark ? (
+                <MdDarkMode />
+              ) : (
+                <MdOutlineLightMode className="text-sky-600" />
+              )}
             </button>
           </div>
           {/* Nav Links / Menu */}

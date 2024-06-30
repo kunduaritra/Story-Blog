@@ -32,6 +32,28 @@ const AddNewStory = () => {
             required
           />
         </div>
+        <div className="flex flex-x-4 items-center">
+          <label className="block text-sm font-medium text-gray-700 mr-2">
+            লেখক
+          </label>
+          <input
+            type="text"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md mr-2"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <label className="block text-sm font-medium text-gray-700 mr-2">
+            প্রকাশিত
+          </label>
+          <input
+            type="date"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
             বিষয়বস্তু

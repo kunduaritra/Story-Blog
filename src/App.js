@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import NavBar from "./components/nav/NavBar";
 import BodyLayout from "./components/pages/BodyLayout";
@@ -12,13 +12,17 @@ import Footer from "./components/nav/Footer";
 import Interview from "./components/pages/Interview";
 import Discussion from "./components/pages/Discussion";
 import Authentication from "./components/pages/Authentication";
+import ThemeContext from "./components/utils/ThemeContext";
 
 const App = () => {
+  const [isDark, setIsDark] = useState(false);
   return (
     <>
-      <NavBar />
-      <Outlet />
-      <Footer />
+      <ThemeContext.Provider value={{ isDark, setIsDark }}>
+        <NavBar />
+        <Outlet />
+        <Footer />
+      </ThemeContext.Provider>
     </>
   );
 };
