@@ -1,16 +1,37 @@
-// src/Layout.js
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import StoryCard from "./StoryCard";
 import { Link } from "react-router-dom";
 import ThemeContext from "../utils/ThemeContext";
 
 const BodyLayout = () => {
   const { isDark } = useContext(ThemeContext);
+  const [storyList, setStoryList] = useState([]);
+
+  useEffect(() => {
+    fetchStory();
+  }, []);
+  const fetchStory = async () => {
+    try {
+      const res = await fetch(
+        "https://kotha-chorcha-default-rtdb.firebaseio.com/story.json"
+      );
+      const resJson = await res.json();
+      const stories = Object.keys(resJson).map((key) => ({
+        id: key,
+        ...resJson[key],
+      }));
+      setStoryList(stories);
+      console.log(stories);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col md:flex-row h-[75vh]">
         {/* Right Announcements Section */}
-        <div className="w-full md:w-1/4 bg-red-900 p-4 overflow-y-auto">
+        <div className="hidden md:block w-1/4 bg-solid p-4 overflow-y-auto">
           <h2 className="text-lg font-semibold mb-4 text-white">
             সাম্প্রতিক ঘোষণা
           </h2>
@@ -37,8 +58,8 @@ const BodyLayout = () => {
         </div>
         {/* Middle Content Section */}
         <div
-          className={`w-full md:w-full ${
-            isDark ? "bg-slate-800" : "bg-white"
+          className={`w-full md:w-full overflow-y-auto ${
+            isDark ? "bg-slate-800" : "bg-secondary"
           } p-4 md:3/4`}
         >
           <h2
@@ -48,9 +69,12 @@ const BodyLayout = () => {
           >
             সাপ্তাহিক গল্প
           </h2>
-          <Link to="/story/001">
-            <StoryCard />
-          </Link>
+          {storyList.length > 0 &&
+            storyList.map((story) => (
+              <Link key={story.id} to={`/story/${story.id}`}>
+                <StoryCard {...story} />
+              </Link>
+            ))}
         </div>
       </div>
     </>

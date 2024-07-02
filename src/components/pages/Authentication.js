@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useContext, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../utils/AuthContext";
 
 const Authentication = () => {
   const username = useRef();
   const password = useRef();
+  const authCntx = useContext(AuthContext);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -33,8 +34,8 @@ const Authentication = () => {
         if (!data.ok) {
           throw new Error(res.error.message);
         } else {
+          authCntx.login(res.idToken);
           navigate("/admin");
-          console.log(data);
         }
       } catch (err) {
         toast.error(err.message, {
@@ -55,7 +56,6 @@ const Authentication = () => {
 
   return (
     <>
-      <ToastContainer theme="colored" closeOnClick rtl={true} />
       <div className="flex items-start justify-center min-h-screen bg-gray-100 px-6">
         {/* card */}
         <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full mt-4">

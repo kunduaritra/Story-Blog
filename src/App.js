@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import NavBar from "./components/nav/NavBar";
 import BodyLayout from "./components/pages/BodyLayout";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  useNavigate,
+} from "react-router-dom";
 import StoryLayout from "./components/pages/StoryLayout";
 import Story from "./components/pages/Story";
 import AdminDashboard from "./components/pages/AdminDashboard";
@@ -12,22 +17,37 @@ import Footer from "./components/nav/Footer";
 import Interview from "./components/pages/Interview";
 import Discussion from "./components/pages/Discussion";
 import Authentication from "./components/pages/Authentication";
-import ThemeContext from "./components/utils/ThemeContext";
+import { ThemeContextProvider } from "./components/utils/ThemeContext";
+import AuthContext, {
+  AuthContextProvider,
+} from "./components/utils/AuthContext";
+import { Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
-  const [isDark, setIsDark] = useState(false);
   return (
     <>
-      <ThemeContext.Provider value={{ isDark, setIsDark }}>
-        <NavBar />
-        <Outlet />
-        <Footer />
-      </ThemeContext.Provider>
+      <AuthContextProvider>
+        <ThemeContextProvider>
+          <NavBar />
+          <Toaster position="top-right" />
+          <Outlet />
+          <Footer />
+        </ThemeContextProvider>
+      </AuthContextProvider>
     </>
   );
 };
 
 export default App;
+
+const AdminRouteCheck = ({ children }) => {
+  const authCntx = useContext(AuthContext);
+  const { isLoggedIn } = authCntx;
+  if (!isLoggedIn) return <Navigate to="/auth" />;
+
+  return children;
+};
 
 const appRouter = createBrowserRouter([
   {
@@ -59,12 +79,16 @@ const appRouter = createBrowserRouter([
         element: <Discussion />,
       },
       {
-        path: "/story/001",
+        path: "/story/:storyId",
         element: <Story />,
       },
       {
         path: "/admin",
-        element: <AdminDashboard />,
+        element: (
+          <AdminRouteCheck>
+            <AdminDashboard />
+          </AdminRouteCheck>
+        ),
         children: [
           {
             path: "admin/posts",

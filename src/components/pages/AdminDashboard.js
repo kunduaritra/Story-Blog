@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
@@ -8,18 +8,33 @@ import {
   faSignOutAlt,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import AuthContext from "../utils/AuthContext";
+import ThemeContext from "../utils/ThemeContext";
 
 const AdminDashboard = () => {
-  // let { path, url } = useRouteMatch();
+  const navigate = useNavigate();
+  const authCntx = useContext(AuthContext);
+  const { isDark } = useContext(ThemeContext);
+  const logoutHandler = () => {
+    authCntx.logout();
+    navigate("/");
+  };
 
   return (
-    <div className="bg-white min-v-screen flex flex-col">
+    <div
+      className={`${
+        isDark ? "bg-dark" : "bg-secondary"
+      } min-v-screen flex flex-col`}
+    >
       {/* Header */}
       <header className="admin-header bg-white p-4 shadow-md flex justify-between items-center">
         <h2 className="admin-heading text-xl font-bold">অ্যাডমিন ড্যাশবোর্ড</h2>
-        <Link to="/" className="logout-link text-blue-600 hover:underline">
-          <FontAwesomeIcon icon={faSignOutAlt} /> প্রস্থান
-        </Link>
+        <button
+          onClick={logoutHandler}
+          className="logout-link text-blue-600 hover:underline"
+        >
+          <FontAwesomeIcon icon={faSignOutAlt} /> লগআউট
+        </button>
       </header>
       <div className="flex flex-col md:flex-row h-screen">
         {/* Side Navigation */}
